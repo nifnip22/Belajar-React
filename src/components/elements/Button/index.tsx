@@ -22,8 +22,8 @@ export const ButtonConst = () => {
 }
 
 // Contoh Penggunaan Props pada Button
-export const ButtonProps = ({ children, variant = 'bg-blue-700', hover = 'bg-blue-800' }: { children: React.ReactNode, variant?: string, hover?: string }) => {
+export const ButtonProps = ({ children, variant = 'bg-blue-700', classname, hover = 'bg-blue-800' }: { children: React.ReactNode, classname?: string, variant?: string, hover?: string }) => {
     return (
-		<button className={`${variant} hover:${hover} text-white font-semibold py-2 px-4 rounded`}>{children}</button>
+		<button className={`${classname} ${variant} hover:${hover} text-white font-semibold py-2 px-4 rounded`}>{children}</button>
 	)
 }
