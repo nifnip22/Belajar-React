@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import LoginPage from './pages/login.tsx'
 import RegisterPage from './pages/register.tsx'
 import ErrorPage from './pages/404.tsx'
+import ProductsPage from './pages/products.tsx'
 
 // Mendefinisikan React Router
 const router = createBrowserRouter([
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <LoginPage />,
+  },
+  {
+    path: '/products',
+    element: <ProductsPage />
   }
 ]);
 
