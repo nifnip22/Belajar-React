@@ -4,7 +4,7 @@ import { ButtonProps } from '../elements/Button';
 const ProductCard = (props: { children: React.ReactNode }) => {
     const { children } = props
 	return (
-		<div className='w-full max-w-sm bg-gray-800 border border-gray-700 rounded-lg shadow'>
+		<div className='flex flex-col justify-between w-full max-w-sm bg-gray-800 border border-gray-700 rounded-lg shadow'>
 			{children}
 		</div>
 	);
@@ -19,12 +19,12 @@ const Header = (props: { image: string }) => {
 	);
 };
 
-const Body = (props: { title: string; children: React.ReactNode }) => {
-    const { title, children } = props;
+const Body = (props: { name: string; children: React.ReactNode }) => {
+    const { name, children } = props;
 	return (
-		<div className='px-5 pb-5'>
+		<div className='h-full px-5 pb-5'>
 			<a href=''>
-				<h5 className='text-gray-100 text-xl font-semibold tracking-tight'>{title}</h5>
+				<h5 className='text-gray-100 text-xl font-semibold tracking-tight'>{name}</h5>
 				<p className='text-md text-gray-100'>
 					{children}
 				</p>
