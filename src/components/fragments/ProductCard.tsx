@@ -4,7 +4,7 @@ import { ButtonProps } from '../elements/Button';
 const ProductCard = (props: { children: React.ReactNode }) => {
     const { children } = props
 	return (
-		<div className='flex flex-col justify-between w-full max-w-sm bg-gray-800 border border-gray-700 rounded-lg shadow'>
+		<div className='flex flex-col justify-between w-full max-w-sm bg-gray-800 border border-gray-700 rounded-lg shadow mx-2 my-2'>
 			{children}
 		</div>
 	);
@@ -33,12 +33,12 @@ const Body = (props: { name: string; children: React.ReactNode }) => {
 	);
 };
 
-const Footer = (props: { price: string }) => {
-    const { price } = props
+const Footer = (props: { price: number, handleAddToCart: (id: number) => void, id: number }) => {
+    const { price, handleAddToCart, id } = props
 	return (
 		<div className='flex items-center justify-between px-5 pb-5'>
-			<span className='text-xl font-bold text-white'>Rp {price}</span>
-			<ButtonProps>Add to Cart</ButtonProps>
+			<span className='text-xl font-bold text-white'>{price.toLocaleString('id-ID', {style: 'currency', currency: 'IDR'})}</span>
+			<ButtonProps onclick={() => handleAddToCart(id)}>Add to Cart</ButtonProps>
 		</div>
 	);
 };
