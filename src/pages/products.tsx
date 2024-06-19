@@ -1,7 +1,7 @@
 import { ButtonProps } from '../components/elements/Button';
 import Counter from '../components/fragments/Counter';
 import ProductCard from '../components/fragments/ProductCard';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Contoh penggunaan Rendering Lists di React
 const products = [
@@ -32,21 +32,36 @@ const products = [
 const email = localStorage.getItem('email');
 
 const ProductsPage = () => {
-	// useState sebagai Stateless State
-	const [cart, setCart] = useState([
-		{
-			id: 1,
-			qty: 1,
-		},
-	]);
+
+	// useState sebagai Stateless State untuk menambahkan product ke cart
+	const [cart, setCart] = useState<{id: number; qty: number;}[]>([]);
+	const [totalPrice, setTotalPrice] = useState(0);
+
+	// Penggunaan useEffect untuk menghitung total price
+	useEffect(() => {
+		if (cart.length > 0) {
+			const sum = cart.reduce((acc, item: { id: number, qty: number }) => {
+				const product = products.find((product) => product.id === item.id);
+				if (product) {
+					return acc + product.price * item.qty;
+				}
+				return acc;
+			}, 0);
+			setTotalPrice(sum);
+			localStorage.setItem('cart', JSON.stringify(cart));
+		}
+	}, [cart]);
+
+	// Penggunaan useEffect untuk mengambil data cart yang telah disimpan pada localStorage
+	useEffect(() => {
+		setCart(JSON.parse(localStorage.getItem('cart') || '[]'));
+	}, []);
 
 	const handleAddToCart = (id: number) => {
-		if(cart.find(item => item.id === id)) {
-			setCart(
-				cart.map(item => item.id === id ? { ...item, qty: item.qty + 1 } : item)
-			)
+		if (cart.find((item: { id: number }) => item.id === id)) {
+			setCart(cart.map((item) => (item.id === id ? { ...item, qty: item.qty + 1 } : item)));
 		} else {
-			setCart([...cart, { id, qty: 1 }])
+			setCart([...cart, { id, qty: 1 }]);
 		}
 	};
 
@@ -79,7 +94,7 @@ const ProductsPage = () => {
 				</div>
 				<div className='w-2/6'>
 					<h1 className='text-3xl font-bold ml-5 mb-2'>Cart</h1>
-					<table className="text-left table-auto border-separate border-spacing-x-5">
+					<table className='text-left table-auto border-separate border-spacing-x-5'>
 						<thead>
 							<tr>
 								<th>Product</th>
@@ -90,20 +105,22 @@ const ProductsPage = () => {
 						</thead>
 						<tbody>
 							{cart.map((item) => {
-								const product = products.find(
-									(p) => p.id === item.id
-								);
+								const product = products.find((p) => p.id === item.id);
 								if (product) {
 									return (
 										<tr key={item.id}>
 											<td>{product.name}</td>
-											<td>{product.price.toLocaleString('id-ID', {style: 'currency', currency: 'IDR'})}</td>
+											<td>{product.price.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</td>
 											<td>{item.qty}</td>
-											<td>{(item.qty * product.price).toLocaleString('id-ID', {style: 'currency', currency: 'IDR'})}</td>
+											<td>{(item.qty * product.price).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</td>
 										</tr>
 									);
 								}
 							})}
+							<tr>
+								<td colSpan={3}><b>Total Price</b></td>
+								<td><b>{totalPrice.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</b></td>
+							</tr>
 						</tbody>
 					</table>
 				</div>
