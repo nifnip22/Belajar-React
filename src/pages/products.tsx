@@ -1,7 +1,7 @@
 import { ButtonProps } from '../components/elements/Button';
 import Counter from '../components/fragments/Counter';
 import ProductCard from '../components/fragments/ProductCard';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // Contoh penggunaan Rendering Lists di React
 const products = [
@@ -32,15 +32,14 @@ const products = [
 const email = localStorage.getItem('email');
 
 const ProductsPage = () => {
-
 	// useState sebagai Stateless State untuk menambahkan product ke cart
-	const [cart, setCart] = useState<{id: number; qty: number;}[]>([]);
+	const [cart, setCart] = useState<{ id: number; qty: number }[]>([]);
 	const [totalPrice, setTotalPrice] = useState(0);
 
 	// Penggunaan useEffect untuk menghitung total price
 	useEffect(() => {
 		if (cart.length > 0) {
-			const sum = cart.reduce((acc, item: { id: number, qty: number }) => {
+			const sum = cart.reduce((acc, item: { id: number; qty: number }) => {
 				const product = products.find((product) => product.id === item.id);
 				if (product) {
 					return acc + product.price * item.qty;
@@ -57,6 +56,27 @@ const ProductsPage = () => {
 		setCart(JSON.parse(localStorage.getItem('cart') || '[]'));
 	}, []);
 
+	// Penggunaan useRef sebagai Referencing Value
+	// const cartRef = useRef(JSON.parse(localStorage.getItem('cart') || '[]'));
+
+	// const handleAddToCartRef = (id: number) => {
+	// 	cartRef.current = [...cartRef.current, { id, qty: 1 }];
+	// };
+
+	// Penggunaan useRef sebagai Manipulation DOM
+	const totalPriceRef = useRef<HTMLTableRowElement>(null);
+
+	useEffect(() => {
+		if (totalPriceRef.current) {
+			if (cart.length > 0) {
+				totalPriceRef.current.style.display = 'table-row';
+			} else {
+				totalPriceRef.current.style.display = 'none';
+			}
+		}
+	}, [cart]);
+
+	// Event Handler
 	const handleAddToCart = (id: number) => {
 		if (cart.find((item: { id: number }) => item.id === id)) {
 			setCart(cart.map((item) => (item.id === id ? { ...item, qty: item.qty + 1 } : item)));
@@ -117,9 +137,13 @@ const ProductsPage = () => {
 									);
 								}
 							})}
-							<tr>
-								<td colSpan={3}><b>Total Price</b></td>
-								<td><b>{totalPrice.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</b></td>
+							<tr ref={totalPriceRef}>
+								<td colSpan={3}>
+									<b>Total Price</b>
+								</td>
+								<td>
+									<b>{totalPrice.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</b>
+								</td>
 							</tr>
 						</tbody>
 					</table>
