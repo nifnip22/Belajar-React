@@ -1,4 +1,5 @@
 import { ButtonProps } from '../components/elements/Button';
+import Counter from '../components/fragments/Counter';
 import ProductCard from '../components/fragments/ProductCard';
 
 // Contoh penggunaan Rendering Lists di React
@@ -47,6 +48,10 @@ const ProductsPage = () => {
 						</ProductCard>
 					);
 				})}
+			</div>
+
+			<div className="flex w-100 justify-center">
+				<Counter></Counter>
 			</div>
 		</>
 	);
