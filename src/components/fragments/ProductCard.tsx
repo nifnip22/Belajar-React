@@ -14,19 +14,22 @@ const Header = (props: { image: string }) => {
     const { image } = props
 	return (
 		<a href='#'>
-			<img src={ image } alt='product' className='p-8 rounded-t-lg' />
+			<img src={ image } alt='product' className='p-8 rounded-t-lg h-60 w-full object-cover' />
 		</a>
 	);
 };
 
-const Body = (props: { name: string; children: React.ReactNode }) => {
-    const { name, children } = props;
+const Body = (props: { title: string; children: React.ReactNode }) => {
+	const { title, children } = props;
+
+	const childrenString = typeof children === 'string' ? children : '';
+
 	return (
 		<div className='h-full px-5 pb-5'>
 			<a href=''>
-				<h5 className='text-gray-100 text-xl font-semibold tracking-tight'>{name}</h5>
+				<h5 className='text-gray-100 text-xl font-semibold tracking-tight'>{title}</h5>
 				<p className='text-md text-gray-100'>
-					{children}
+					{childrenString.substring(0, 100)}...
 				</p>
 			</a>
 		</div>
@@ -37,7 +40,7 @@ const Footer = (props: { price: number, handleAddToCart: (id: number) => void, i
     const { price, handleAddToCart, id } = props
 	return (
 		<div className='flex items-center justify-between px-5 pb-5'>
-			<span className='text-xl font-bold text-white'>{price.toLocaleString('id-ID', {style: 'currency', currency: 'IDR'})}</span>
+			<span className='text-xl font-bold text-white'>{price.toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</span>
 			<ButtonProps onclick={() => handleAddToCart(id)}>Add to Cart</ButtonProps>
 		</div>
 	);
